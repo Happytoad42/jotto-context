@@ -4,6 +4,12 @@ import propTypes from 'prop-types';
 const Input = ({ secretWord }) => {
   const [currentGuess, setCurrentGuess] = React.useState('');
 
+  // TODO update guessWord context on submit button click
+  const handleSubmitClick = (e) => {
+    e.preventDefault();
+    setCurrentGuess('');
+  };
+
   return (
     <div data-test='component-input'>
       <form className='form-inline'>
@@ -19,6 +25,7 @@ const Input = ({ secretWord }) => {
           className='btn btn-primary mb-2'
           type='submit'
           data-test='submit-button'
+          onClick={(e) => handleSubmitClick(e)}
         >
           Submit
         </button>
