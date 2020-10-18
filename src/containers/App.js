@@ -35,10 +35,10 @@ function App() {
         <p>Loading secret word</p>
       </div>
     )
-  }
+  } 
 
   return (
-    <div data-test='component-app'>
+    <div className='container' data-test='component-app'>
       <h1>Welcome to Jotto!</h1>
       <Input secretWord={state.secretWord}/>
     </div>
