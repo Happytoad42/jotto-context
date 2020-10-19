@@ -1,6 +1,7 @@
 import React from 'react';
 import hookActions from '../actions/hookActions';
 import Input from '../components/Input/Input';
+import GuesssedWords from '../components/GuessedWords/GuessedWords';
 import languageContext from '../contexts/languageContext';
 import LanguagePicker from '../components/LanguagePicker/LanguagePicker';
 
