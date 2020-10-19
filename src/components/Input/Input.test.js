@@ -1,18 +1,41 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount, ReactWrapper } from 'enzyme';
 import { findByTestAttr, checkProps } from '../../../test/testUtils';
 import Input from './Input';
+import languageContext from '../../contexts/languageContext';
 
 const defaultProps = { secretWord: 'party' };
 
-const setup = (secretWord = 'party') => {
-  return shallow(<Input secretWord={secretWord} />);
+/**
+ * Creat ReactWrapper for Input component for testing
+ * @param {object} testValues Context and props values for this test
+ * @returns {ReactWrapper} Wrapper for Input component and providers
+ */
+const setup = ({ language, secretWord }) => {
+  language = language || 'en';
+  secretWord = secretWord || 'party';
+  return mount(
+    <languageContext.Provider value={language}>
+      <Input secretWord={secretWord} />
+    </languageContext.Provider>
+  );
 };
+
+describe('Input languagePicker context tests', () => {
+  test('Correctly renders submit in elnglish', () => {
+    const wrapper = setup({ language: 'en' });
+    expect(wrapper.text()).toBe('Submit');
+  });
+  test('Correctly renders submit in emoji if emoji language selected', () => {
+    const wrapper = setup({ language: 'emoji' });
+    expect(wrapper.text()).toBe('🚀');
+  });
+});
 
 describe('Input component', () => {
   let wrapper;
   beforeEach(() => {
-    wrapper = setup();
+    wrapper = setup({});
   });
   test('Renders component without crashing', () => {
     const component = findByTestAttr(wrapper, 'component-input');
@@ -30,7 +53,7 @@ describe('state controlled Input field', () => {
   beforeEach(() => {
     mockSetCurrentGuess.mockClear();
     React.useState = jest.fn(() => ['', mockSetCurrentGuess]);
-    wrapper = setup();
+    wrapper = setup({});
   });
   test('state updates wth value on input change', () => {
     const inputBox = findByTestAttr(wrapper, 'input-box');

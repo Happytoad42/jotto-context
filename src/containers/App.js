@@ -1,6 +1,8 @@
 import React from 'react';
 import hookActions from '../actions/hookActions';
 import Input from '../components/Input/Input';
+import languageContext from '../contexts/languageContext';
+import LanguagePicker from '../components/LanguagePicker/LanguagePicker';
 
 /**
  * reducer to update state called automatically by dispatch
@@ -9,38 +11,50 @@ import Input from '../components/Input/Input';
  * @returns {object} new state
  */
 const reducer = (state, action) => {
-  switch(action.type) {
+  switch (action.type) {
     case 'setSecretWord':
       return { ...state, secretWord: action.payload };
+    case 'setLanguage':
+      return { ...state, language: action.payload };
     default:
       return state;
   }
-}
+};
 
 function App() {
-  const [state, dispatch] = React.useReducer(reducer, { secretWord: null })
+  const [state, dispatch] = React.useReducer(reducer, {
+    secretWord: null,
+    language: 'en',
+  });
 
-  const setSecretWord = (secretWord) => dispatch({ type: 'setSecretWord', payload: secretWord });
+  const setSecretWord = (secretWord) =>
+    dispatch({ type: 'setSecretWord', payload: secretWord });
+
+  const setLanguage = (language) =>
+    dispatch({ type: 'setLanguage', payload: language });
 
   React.useEffect(() => {
-    hookActions.getSecretWord(setSecretWord)
-  }, [])
+    hookActions.getSecretWord(setSecretWord);
+  }, []);
 
   if (!state.secretWord) {
     return (
-      <div className="container" data-test="spinner">
-        <div className="spinner-border" role="status">
-          <span className="sr-only">Loading...</span>
+      <div className='container' data-test='spinner'>
+        <div className='spinner-border' role='status'>
+          <span className='sr-only'>Loading...</span>
         </div>
         <p>Loading secret word</p>
       </div>
-    )
-  } 
+    );
+  }
 
   return (
     <div className='container' data-test='component-app'>
-      <h1>Welcome to Jotto!</h1>
-      <Input secretWord={state.secretWord}/>
+      <h1>Jotto</h1>
+      <languageContext.Provider value={state.language}>
+        <LanguagePicker setLanguage={setLanguage} />
+        <Input secretWord={state.secretWord} />
+      </languageContext.Provider>
     </div>
   );
 }
