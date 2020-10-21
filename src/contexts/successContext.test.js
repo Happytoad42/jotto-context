@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow, moount, mount } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 
 import successContext from './successContext';
 
