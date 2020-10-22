@@ -4,7 +4,8 @@ const successContext = React.createContext();
 
 /**
  * @function useSuccess
- * @returns {array} successContext value, a state of [value, setter]
+ * @returns {array} successContext value, which is a state of [value, setter].
+ *
  */
 function useSuccess() {
   const context = React.useContext(successContext);
@@ -18,7 +19,7 @@ function useSuccess() {
 
 /**
  * @function SuccessProvider
- * @param {object} props props to pass through from declared component
+ * @param {object} props - props to pass through from declared component
  * @returns {JSX.Element} Provider component
  */
 function SuccessProvider(props) {
@@ -29,4 +30,4 @@ function SuccessProvider(props) {
   return <successContext.Provider value={value} {...props} />;
 }
 
-export default { useSuccess, SuccessProvider };
+export default { SuccessProvider, useSuccess };
