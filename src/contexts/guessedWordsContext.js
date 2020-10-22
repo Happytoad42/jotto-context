@@ -1,13 +1,13 @@
 import React from 'react';
 
-const successContext = React.createContext();
+const guessedWordsContext = React.createContext();
 
 /**
  * @function useGuessedWords
- * @returns {array} successContext value, a state of [value, setter]
+ * @returns {array} guessedWordsContext value, a state of [value, setter]
  */
 function useGuessedWords() {
-  const context = React.useContext(successContext);
+  const context = React.useContext(guessedWordsContext);
 
   if (!context) {
     throw new Error('useGuessedWords must be used within GuessedWordsProvider');
@@ -28,7 +28,7 @@ function GuessedWordsProvider(props) {
     guessedWords,
   ]);
 
-  return <successContext.Provider value={value} {...props} />;
+  return <guessedWordsContext.Provider value={value} {...props} />;
 }
 
 export default { useGuessedWords, GuessedWordsProvider };
