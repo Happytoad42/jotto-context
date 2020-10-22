@@ -1,8 +1,11 @@
 import React from 'react';
-import { shallow, mount, ReactWrapper } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { findByTestAttr, checkProps } from '../../../test/testUtils';
-import Input from './Input';
+
 import languageContext from '../../contexts/languageContext';
+import successContext from '../../contexts/successContext';
+
+import Input from './Input';
 
 const defaultProps = { secretWord: 'party' };
 
@@ -11,12 +14,16 @@ const defaultProps = { secretWord: 'party' };
  * @param {object} testValues Context and props values for this test
  * @returns {ReactWrapper} Wrapper for Input component and providers
  */
-const setup = ({ language, secretWord }) => {
+const setup = ({ language, secretWord, success }) => {
   language = language || 'en';
   secretWord = secretWord || 'party';
+  success = success || false;
+
   return mount(
     <languageContext.Provider value={language}>
-      <Input secretWord={secretWord} />
+      <successContext.SuccessProvider value={[success, jest.fn()]}>
+        <Input secretWord={secretWord} />
+      </successContext.SuccessProvider>
     </languageContext.Provider>
   );
 };
@@ -70,4 +77,9 @@ describe('state controlled Input field', () => {
     submitButton.simulate('click', { preventDefault() {} });
     expect(mockSetCurrentGuess).toHaveBeenCalledWith('');
   });
+});
+
+test('input component is empty when success is true', () => {
+  const wrapper = setup({ secretWord: 'party', success: true });
+  expect(wrapper.isEmptyRender()).toBe(true);
 });
