@@ -4,4 +4,18 @@ Run `npm install` - to install all dependencies
 
 Run `npm test` - to run tests
 
-Run `npm start` - to run the app
+## To run the app
+
+# Run the random-word-server
+
+`cd random-word-server` to move into the server folder
+
+`npm intstall` to install server dependencies
+
+`npm start` to start the server
+
+# Run the app itself
+
+`cd ../` move one level up
+
+`npm start` to start the app

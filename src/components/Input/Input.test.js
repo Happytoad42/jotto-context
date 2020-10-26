@@ -1,18 +1,17 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 import { findByTestAttr, checkProps } from '../../../test/testUtils';
 
 import languageContext from '../../contexts/languageContext';
 import successContext from '../../contexts/successContext';
+import guessedWordsContext from '../../contexts/guessedWordsContext';
 
 import Input from './Input';
 
-const defaultProps = { secretWord: 'party' };
-
 /**
- * Creat ReactWrapper for Input component for testing
- * @param {object} testValues Context and props values for this test
- * @returns {ReactWrapper} Wrapper for Input component and providers
+ * Create ReactWrapper for Input component for testing
+ * @param {object} testValues - Context and props values for this specific test.
+ * @returns {ReactWrapper} - Wrapper for Input component and providers
  */
 const setup = ({ language, secretWord, success }) => {
   language = language || 'en';
@@ -22,47 +21,34 @@ const setup = ({ language, secretWord, success }) => {
   return mount(
     <languageContext.Provider value={language}>
       <successContext.SuccessProvider value={[success, jest.fn()]}>
-        <Input secretWord={secretWord} />
+        <guessedWordsContext.GuessedWordsProvider>
+          <Input secretWord={secretWord} />
+        </guessedWordsContext.GuessedWordsProvider>
       </successContext.SuccessProvider>
     </languageContext.Provider>
   );
 };
 
-describe('Input languagePicker context tests', () => {
-  test('Correctly renders submit in elnglish', () => {
-    const wrapper = setup({ language: 'en' });
-    expect(wrapper.text()).toBe('Submit');
-  });
-  test('Correctly renders submit in emoji if emoji language selected', () => {
-    const wrapper = setup({ language: 'emoji' });
-    expect(wrapper.text()).toBe('🚀');
-  });
+test('Input renders without error', () => {
+  const wrapper = setup({});
+  const inputComponent = findByTestAttr(wrapper, 'component-input');
+  expect(inputComponent.length).toBe(1);
 });
 
-describe('Input component', () => {
-  let wrapper;
-  beforeEach(() => {
-    wrapper = setup({});
-  });
-  test('Renders component without crashing', () => {
-    const component = findByTestAttr(wrapper, 'component-input');
-    expect(component.length).toBe(1);
-  });
-
-  test('does not throw warning with expected props', () => {
-    checkProps(Input, defaultProps);
-  });
+test('does not throw warning with expected props', () => {
+  checkProps(Input, { secretWord: 'party' });
 });
 
-describe('state controlled Input field', () => {
-  let wrapper;
+describe('state controlled input field', () => {
   let mockSetCurrentGuess = jest.fn();
+  let wrapper;
+
   beforeEach(() => {
     mockSetCurrentGuess.mockClear();
     React.useState = jest.fn(() => ['', mockSetCurrentGuess]);
     wrapper = setup({});
   });
-  test('state updates wth value on input change', () => {
+  test('state updates with value of input box upon change', () => {
     const inputBox = findByTestAttr(wrapper, 'input-box');
 
     const mockEvent = { target: { value: 'train' } };
@@ -70,8 +56,7 @@ describe('state controlled Input field', () => {
 
     expect(mockSetCurrentGuess).toHaveBeenCalledWith('train');
   });
-
-  test('input clears on submit click', () => {
+  test('field is cleared upon submit button click', () => {
     const submitButton = findByTestAttr(wrapper, 'submit-button');
 
     submitButton.simulate('click', { preventDefault() {} });
@@ -79,7 +64,20 @@ describe('state controlled Input field', () => {
   });
 });
 
-test('input component is empty when success is true', () => {
+describe('languagePicker', () => {
+  test('correctly renders submit string in english', () => {
+    const wrapper = setup({ language: 'en' });
+    const submitButton = findByTestAttr(wrapper, 'submit-button');
+    expect(submitButton.text()).toBe('Submit');
+  });
+  test('correctly renders congrats string in emoji', () => {
+    const wrapper = setup({ language: 'emoji' });
+    const submitButton = findByTestAttr(wrapper, 'submit-button');
+    expect(submitButton.text()).toBe('🚀');
+  });
+});
+
+test('input component does not show when success is true', () => {
   const wrapper = setup({ secretWord: 'party', success: true });
   expect(wrapper.isEmptyRender()).toBe(true);
 });
