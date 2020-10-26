@@ -1,12 +1,14 @@
-## Simple app to hone Jest and Enzyme testing skills with modern React patterns - hooks and context
+# Try and guess the word!
+
+## Excercise in React App testing with Jest and Enzyme
 
 Run `npm install` - to install all dependencies
 
 Run `npm test` - to run tests
 
-## To run the app
+# To run the app
 
-# Run the random-word-server
+## Run the random-word-server
 
 `cd random-word-server` to move into the server folder
 
@@ -14,7 +16,7 @@ Run `npm test` - to run tests
 
 `npm start` to start the server
 
-# Run the app itself
+## Run the app itself
 
 `cd ../` move one level up
 
